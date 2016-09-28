@@ -5,11 +5,11 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exercise08", "Exercise08", "{2E738BC4-CF13-4899-B00A-89712F61A6D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "file_client", "file_client\file_client.csproj", "{EE28A31A-6194-40D8-9478-022D47CB6517}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "file_client", "Exercise08\file_client\file_client.csproj", "{EE28A31A-6194-40D8-9478-022D47CB6517}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "file_server", "file_server\file_server.csproj", "{74B158F5-42EC-46A9-9AC7-E205635B23E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "file_server", "Exercise08\file_server\file_server.csproj", "{74B158F5-42EC-46A9-9AC7-E205635B23E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIB", "LIB\LIB.csproj", "{B74C6B12-6130-4C53-B95D-4F6F998A24CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIB", "Exercise08\LIB\LIB.csproj", "{B74C6B12-6130-4C53-B95D-4F6F998A24CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
