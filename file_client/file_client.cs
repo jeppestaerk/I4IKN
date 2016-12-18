@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using Transportlaget;
 
 namespace Application
@@ -9,7 +10,7 @@ namespace Application
 		/// <summary>
 		/// The BUFSIZE.
 		/// </summary>
-		const int BUFSIZE = 1000;
+		const int BUFSIZE = 2000;
 
 
 		/// <summary>
@@ -24,29 +25,33 @@ namespace Application
 		/// <param name='args'>
 		/// Filnavn med evtuelle sti.
 		/// </param>
-		private file_client (String[] args, Transport transport)
-		{
-			try {
-				Console.WriteLine ("Retrieving file");
-
-				string fileToReceive = (args.Length > 0) ? args [0] : "billede.jpg";
-
-				transport.sendText (fileToReceive);
-
-				//Read confirmation that file exists
-
-				if (transport.readText () == "File found") {
+		private file_client(String[] args, Transport transport)
+	    {
+			try
+			{
+				Console.WriteLine ("Modtager fil");
+				string fileToReceive = (args.Length > 0) ? args[0] : "rubber-duck.png";
+				transport.sendText(fileToReceive);
+				if (transport.readText() == "Filen blev fundet på serveren") 
+				{
+					Console.WriteLine ("Filen blev fundet på serveren");
 					receiveFile (fileToReceive, transport);
-				} else {
-					Console.WriteLine ("404 - File not found");
+				} 
+				else 
+				{
+					Console.WriteLine ("Filen blev IKKE fundet på serveren");
 				}
-			} catch (Exception ex) {
-				Console.WriteLine ("Generel exception occured");
-				Console.WriteLine (ex.Message);
-			} finally {
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine ("Exception :(");
+				Console.WriteLine(ex.Message);
+			}
+			finally 
+			{
 
 			}
-		}
+	    }
 
 		/// <summary>
 		/// Receives the file.
@@ -59,25 +64,21 @@ namespace Application
 		/// </param>
 		private void receiveFile (String fileName, Transport transport)
 		{
-			long fileSize = long.Parse (transport.readText ());
-
-			Console.WriteLine ("Size of file: " + fileSize);
-
+			long fileSize = long.Parse(transport.readText());
+			Console.WriteLine ("Størrelse på fil: " + fileSize);
 			byte[] RecData = new byte[BUFSIZE];
 			int RecBytes;
-
 			int totalrecbytes = 0;
-			FileStream Fs = new FileStream (fileName, FileMode.OpenOrCreate, FileAccess.Write);
-			while (fileSize > totalrecbytes) {
+			FileStream Fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
+			while (fileSize > totalrecbytes) 
+			{
 				RecBytes = transport.receive (ref RecData);
 				Fs.Write (RecData, 0, RecBytes);
 				totalrecbytes += RecBytes;
-				Console.Write ("\rReceived " + totalrecbytes + " bytes from server");
+				Console.Write ("\rModtaget " + totalrecbytes + " bytes fra server");
 			}
-
-			Console.WriteLine ("\nFile transfer complete - Closing connection");
-
-			Fs.Close ();
+			Console.WriteLine ("\nFilen blev modtaget - Lukker forbindelsen");
+			Fs.Close();
 		}
 
 		/// <summary>
@@ -89,7 +90,7 @@ namespace Application
 		public static void Main (string[] args)
 		{
 			Transport transport = new Transport (BUFSIZE);
-			new file_client (args, transport);
+			new file_client(args, transport);
 		}
 	}
 }

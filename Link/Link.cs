@@ -24,23 +24,21 @@ namespace Linklaget
 		/// </summary>
 		SerialPort serialPort;
 
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="link"/> class.
 		/// </summary>
 		public Link (int BUFSIZE)
 		{
-			// Create a new SerialPort object with default settings.
-			serialPort = new SerialPort ("/dev/ttyS0", 115200, Parity.None, 8, StopBits.One);
-
-			if (!serialPort.IsOpen)
-				serialPort.Open ();
-
-			buffer = new byte[(BUFSIZE * 2) + 2];
+			serialPort = new SerialPort("/dev/ttyS0",115200,Parity.None,8,StopBits.One);
+			if(!serialPort.IsOpen)
+				serialPort.Open();
+			buffer = new byte[(BUFSIZE*2)+2];
 		}
 
 		/// <summary>
 		/// Send the specified buf and size.
-		/// </summary>
+		/// </summary> 
 		/// <param name='buf'>
 		/// Buffer.
 		/// </param>
@@ -49,18 +47,20 @@ namespace Linklaget
 		/// </param>
 		public void send (byte[] buf, int size)
 		{
-			buffer [0] = 65; //Insert A at start
+			buffer[0] = 65; //Insert A at start
 			int bytesToSendIndex = 1;
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < size; i++) 
+			{
 				if (buf [i] == 65) {
-					buffer [bytesToSendIndex] = 66;
+					buffer[bytesToSendIndex] = 66;
 					bytesToSendIndex++;
-					buffer [bytesToSendIndex] = 67;
+					buffer[bytesToSendIndex] = 67;
 					bytesToSendIndex++;
-				} else if (buf [i] == 66) {
-					buffer [bytesToSendIndex] = 66;
+				}
+				else if (buf [i] == 66) {
+					buffer[bytesToSendIndex] = 66;
 					bytesToSendIndex++;
-					buffer [bytesToSendIndex] = 68;
+					buffer[bytesToSendIndex] = 68;
 					bytesToSendIndex++;
 				} else {
 					buffer [bytesToSendIndex] = buf [i];
@@ -83,13 +83,12 @@ namespace Linklaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
-			// TO DO Your own code
-			byte[] tempBuf = new byte[1]; //temp buffer to read bytes one at a time
+			byte[] tempBuf = new byte[1];
 			int bytesReceived = 0;
 			while (true) {
 				serialPort.Read (tempBuf, 0, 1);
 
-				while (tempBuf [0] != 'A') {
+				while (tempBuf[0] != 'A') {
 				}
 				bool registerStop = false;
 
@@ -109,7 +108,7 @@ namespace Linklaget
 							buf [bytesReceived] = 66;
 							bytesReceived++;
 						} else
-							Console.WriteLine ("invalid byte after B received");
+							Console.WriteLine ("Dårlig byte efter B modtaget");
 					} else {
 						buf [bytesReceived] = tempBuf [0];
 						bytesReceived++;

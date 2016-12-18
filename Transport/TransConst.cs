@@ -22,3 +22,4 @@ namespace Transportlaget
 		ACK = 1
 	};
 }
+
