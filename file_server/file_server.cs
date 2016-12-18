@@ -7,7 +7,7 @@ namespace serial
 {
 	class file_server
 	{
-		private const int BUFSIZE = 2000;
+		private const int BUFSIZE = 1000;
 		const int PORT = 9000;
 
 		/// <summary>

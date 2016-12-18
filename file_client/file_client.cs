@@ -10,7 +10,7 @@ namespace Application
 		/// <summary>
 		/// The BUFSIZE.
 		/// </summary>
-		const int BUFSIZE = 2000;
+		const int BUFSIZE = 1000;
 
 
 		/// <summary>
