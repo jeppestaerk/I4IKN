@@ -4,90 +4,92 @@ using Transportlaget;
 
 namespace Application
 {
-  class file_client
-  {
-    /// <summary>
-    /// The BUFSIZE.
-    /// </summary>
-    const int BUFSIZE = 1000;
+	class file_client
+	{
+		/// <summary>
+		/// The BUFSIZE.
+		/// </summary>
+		const int BUFSIZE = 1000;
 
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="file_client"/> class.
-    /// 
-    /// file_client metoden opretter en peer-to-peer forbindelse
-    /// Sender en forspÃ¸rgsel for en bestemt fil om denne findes pÃ¥ serveren
-    /// Modtager filen hvis denne findes eller en besked om at den ikke findes (jvf. protokol beskrivelse)
-    /// Lukker alle streams og den modtagede fil
-    /// Udskriver en fejl-meddelelse hvis ikke antal argumenter er rigtige
-    /// </summary>
-    /// <param name='args'>
-    /// Filnavn med evtuelle sti.
-    /// </param>
-    private file_client(String[] args, Transport transport)
-    {
-      Console.WriteLine("Retrieving file");
+		/// <summary>
+		/// Initializes a new instance of the <see cref="file_client"/> class.
+		/// 
+		/// file_client metoden opretter en peer-to-peer forbindelse
+		/// Sender en forspÃ¸rgsel for en bestemt fil om denne findes pÃ¥ serveren
+		/// Modtager filen hvis denne findes eller en besked om at den ikke findes (jvf. protokol beskrivelse)
+		/// Lukker alle streams og den modtagede fil
+		/// Udskriver en fejl-meddelelse hvis ikke antal argumenter er rigtige
+		/// </summary>
+		/// <param name='args'>
+		/// Filnavn med evtuelle sti.
+		/// </param>
+		private file_client (String[] args, Transport transport)
+		{
+			try {
+				Console.WriteLine ("Retrieving file");
 
-      string fileToReceive = (args.Length > 0) ? args[0] : "billede.jpg";
+				string fileToReceive = (args.Length > 0) ? args [0] : "billede.jpg";
 
-      transport.sendText(fileToReceive);
+				transport.sendText (fileToReceive);
 
-      //Read confirmation that file exists
+				//Read confirmation that file exists
 
-      if (transport.readText() == "File found")
-      {
-        receiveFile(fileToReceive, transport);
-      }
-      else
-      {
-        Console.WriteLine("404 - File not found");
-      }
+				if (transport.readText () == "File found") {
+					receiveFile (fileToReceive, transport);
+				} else {
+					Console.WriteLine ("404 - File not found");
+				}
+			} catch (Exception ex) {
+				Console.WriteLine ("Generel exception occured");
+				Console.WriteLine (ex.Message);
+			} finally {
 
-    }
+			}
+		}
 
-    /// <summary>
-    /// Receives the file.
-    /// </summary>
-    /// <param name='fileName'>
-    /// File name.
-    /// </param>
-    /// <param name='transport'>
-    /// Transportlaget
-    /// </param>
-    private void receiveFile(String fileName, Transport transport)
-    {
-      long fileSize = long.Parse(transport.readText());
+		/// <summary>
+		/// Receives the file.
+		/// </summary>
+		/// <param name='fileName'>
+		/// File name.
+		/// </param>
+		/// <param name='transport'>
+		/// Transportlaget
+		/// </param>
+		private void receiveFile (String fileName, Transport transport)
+		{
+			long fileSize = long.Parse (transport.readText ());
 
-      Console.WriteLine("Size of file: " + fileSize);
+			Console.WriteLine ("Size of file: " + fileSize);
 
-      byte[] RecData = new byte[BUFSIZE];
-      int RecBytes;
+			byte[] RecData = new byte[BUFSIZE];
+			int RecBytes;
 
-      int totalrecbytes = 0;
-      FileStream Fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
-      while (fileSize > totalrecbytes)
-      {
-        RecBytes = transport.receive(ref RecData);
-        Fs.Write(RecData, 0, RecBytes);
-        totalrecbytes += RecBytes;
-        Console.Write("\rReceived " + totalrecbytes + " bytes from server");
-      }
+			int totalrecbytes = 0;
+			FileStream Fs = new FileStream (fileName, FileMode.OpenOrCreate, FileAccess.Write);
+			while (fileSize > totalrecbytes) {
+				RecBytes = transport.receive (ref RecData);
+				Fs.Write (RecData, 0, RecBytes);
+				totalrecbytes += RecBytes;
+				Console.Write ("\rReceived " + totalrecbytes + " bytes from server");
+			}
 
-      Console.WriteLine("\nFile transfer complete - Closing connection");
+			Console.WriteLine ("\nFile transfer complete - Closing connection");
 
-      Fs.Close();
-    }
+			Fs.Close ();
+		}
 
-    /// <summary>
-    /// The entry point of the program, where the program control starts and ends.
-    /// </summary>
-    /// <param name='args'>
-    /// First argument: Filname
-    /// </param>
-    public static void Main(string[] args)
-    {
-      Transport transport = new Transport(BUFSIZE);
-      new file_client(args, transport);
-    }
-  }
+		/// <summary>
+		/// The entry point of the program, where the program control starts and ends.
+		/// </summary>
+		/// <param name='args'>
+		/// First argument: Filname
+		/// </param>
+		public static void Main (string[] args)
+		{
+			Transport transport = new Transport (BUFSIZE);
+			new file_client (args, transport);
+		}
+	}
 }
