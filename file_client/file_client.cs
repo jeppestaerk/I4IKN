@@ -32,14 +32,18 @@ namespace Application
 				Console.WriteLine ("Modtager fil");
 				string fileToReceive = (args.Length > 0) ? args[0] : "rubber-duck.png";
 				transport.sendText(fileToReceive);
-				if (transport.readText() == "Filen blev fundet på serveren") 
+				if (transport.readText() == "FileFound") 
 				{
 					Console.WriteLine ("Filen blev fundet på serveren");
 					receiveFile (fileToReceive, transport);
 				} 
-				else 
+				else if (transport.readText() == "FileNotFound") 
 				{
 					Console.WriteLine ("Filen blev IKKE fundet på serveren");
+				}
+				else
+				{
+					Console.WriteLine ("Ukendt fejl");
 				}
 			}
 			catch (Exception ex)

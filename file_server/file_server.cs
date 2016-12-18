@@ -23,13 +23,13 @@ namespace serial
 				long fileSize = LIB.check_File_Exists (fileToSend);
 				if (fileSize != 0)
 				{
-					transport.sendText("Filen blev fundet på serveren");
+					transport.sendText("FileFound");
 					Console.WriteLine ("Filen blev fundet på serveren");
 					sendFile (fileToSend, fileSize, transport);
 				} 
 				else 
 				{
-					transport.sendText("Filen blev IKKE fundet på serveren");
+					transport.sendText("FileNotFound");
 					Console.WriteLine ("Filen blev IKKE fundet på serveren");
 				}
 			}
